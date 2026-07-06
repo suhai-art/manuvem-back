@@ -15,6 +15,15 @@ fi
 
 chmod -R ugo+rw /.composer
 
+if [ ! -f /var/www/html/vendor/autoload.php ]; then
+    echo "Vendor não encontrado. Rodando composer install..."
+    gosu $WWWUSER composer install --no-interaction --prefer-dist --optimize-autoloader
+fi
+
+php artisan key:generate
+php artisan migrate
+php artisan tenants:migrate
+
 if [ $# -gt 0 ]; then
     if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
         exec "$@"

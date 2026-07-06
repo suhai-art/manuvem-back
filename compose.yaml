@@ -1,28 +1,32 @@
 services:
-  laravel.test:
+  laravel:
     build:
       context: "./docker/runtimes/8.5"
       dockerfile: Dockerfile
       args:
         WWWGROUP: "${WWWGROUP:-1000}"
-    image: "sail-8.5/app"
+    image: "app-8.5/php"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "${APP_PORT:-80}:80"
     environment:
       WWWUSER: "${WWWUSER:-1000}"
-      LARAVEL_SAIL: 1
+      LARAVEL_SAIL: 1 # mantenha este
       XDEBUG_MODE: "${SAIL_XDEBUG_MODE:-off}"
       XDEBUG_CONFIG: "${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}"
       IGNITION_LOCAL_SITES_PATH: "${PWD}"
     volumes:
       - ".:/var/www/html"
     networks:
-      - sail
+      - app-network
+      - data-network
     depends_on:
-      - pgsql
-      - minio
+      pgsql:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
   pgsql:
     image: "postgres:18-alpine"
     ports:
@@ -33,10 +37,9 @@ services:
       POSTGRES_USER: "${DB_USERNAME}"
       POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
     volumes:
-      - "sail-pgsql:/var/lib/postgresql"
-      - "./docker/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql"
+      - "app-pgsql:/var/lib/postgresql"
     networks:
-      - sail
+      - data-network
     healthcheck:
       test:
         - CMD
@@ -48,19 +51,20 @@ services:
         - "${DB_USERNAME}"
       retries: 3
       timeout: 5s
+
   minio:
     image: "minio/minio:latest"
     ports:
       - "${FORWARD_MINIO_PORT:-9000}:9000"
       - "${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900"
     environment:
-      MINIO_ROOT_USER: sail
-      MINIO_ROOT_PASSWORD: password
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD}"
     volumes:
-      - "sail-minio:/data"
+      - "app-minio:/data"
     networks:
-      - sail
-    command: 'minio server /data --console-address ":8900"'
+      - data-network
+    command: 'minio server /data --console-address ":${MINIO_CONSOLE_PORT:-8900}"'
     healthcheck:
       test:
         - CMD
@@ -69,11 +73,19 @@ services:
         - local
       retries: 3
       timeout: 5s
+
 networks:
-  sail:
+  data-network:
     driver: bridge
+    external: false
+
+  app-network:
+    driver: bridge
+
+
 volumes:
-  sail-pgsql:
+  app-pgsql:
     driver: local
-  sail-minio:
+
+  app-minio:
     driver: local
