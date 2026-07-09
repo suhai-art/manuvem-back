@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\FormatApiResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,9 +15,22 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(fn() => null);
+        $middleware->append(
+            FormatApiResponse::class,
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn(Request $request) => $request->is('*'),
         );
-    })->create();
+
+        $exceptions->render(function (Throwable $e, Request $request) {
+            $status = FormatApiResponse::resolveExceptionStatus($e);
+
+            return response()->json(
+                FormatApiResponse::resolveExceptionPayload($e, $status),
+                $status
+            );
+        });
+    })
+    ->create();
