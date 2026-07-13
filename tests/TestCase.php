@@ -15,6 +15,8 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        $this->artisan('migrate');
+
         if ($this->tenancy) {
             $this->initializeTenancy();
         }
