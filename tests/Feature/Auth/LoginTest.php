@@ -12,7 +12,6 @@ class LoginTest extends TestCase
     public function test_user_can_login_with_valid_credentials(): void
     {
         $password = 'password';
-
         $user = User::factory()->create([
             'password' => $password,
         ]);
@@ -21,7 +20,6 @@ class LoginTest extends TestCase
             'email' => $user->email,
             'password' => $password,
         ]);
-
 
         $response->assertJson([
             'success' => true
@@ -43,5 +41,12 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertUnauthorized();
+    }
+
+    public function test_login_requires_email_and_password(): void
+    {
+        $response = $this->postJson($this->baseUrl . '/api/auth/login', []);
+
+        $response->assertStatus(422);
     }
 }

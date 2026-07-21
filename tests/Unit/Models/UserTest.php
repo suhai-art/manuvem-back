@@ -15,6 +15,8 @@ class UserTest extends TestCase
             'name',
             'email',
             'password',
+            'role',
+            'status',
         ], $user->getFillable());
     }
 
@@ -46,5 +48,20 @@ class UserTest extends TestCase
             'datetime',
             $user->getCasts()['email_verified_at']
         );
+    }
+
+    public function test_user_uses_soft_deletes(): void
+    {
+        $user = new User();
+
+        $this->assertContains('Illuminate\Database\Eloquent\SoftDeletes', class_uses_recursive($user));
+    }
+
+    public function test_user_factory_creates_user_with_default_role_and_status(): void
+    {
+        $user = User::factory()->make();
+
+        $this->assertEquals('admin', $user->role);
+        $this->assertEquals('active', $user->status);
     }
 }

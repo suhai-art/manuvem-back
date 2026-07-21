@@ -13,7 +13,6 @@ class LogoutTest extends TestCase
     public function test_authenticated_user_can_logout(): void
     {
         $user = User::factory()->create();
-
         Sanctum::actingAs($user);
 
         $response = $this->postJson($this->baseUrl . '/api/auth/logout');

@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\ClientsController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('clients')->middleware('auth:sanctum')->group(function () {
+Route::prefix('clients')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/', [ClientsController::class, 'find']);
     Route::post('/', [ClientsController::class, 'createUpdate']);
     Route::put('/{id}', [ClientsController::class, 'createUpdate']);

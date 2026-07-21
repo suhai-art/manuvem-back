@@ -8,13 +8,11 @@ use Tests\TestCase;
 
 class MeTest extends TestCase
 {
-
     protected bool $tenancy = true;
 
     public function test_authenticated_user_can_get_his_information(): void
     {
         $user = User::factory()->create();
-
         Sanctum::actingAs($user);
 
         $this->getJson($this->baseUrl . '/api/auth/me')
@@ -27,9 +25,21 @@ class MeTest extends TestCase
             ]);
     }
 
-    public function test_guest_cannot_access_me()
+    public function test_guest_cannot_access_me(): void
     {
         $this->getJson($this->baseUrl . '/api/auth/me')
             ->assertUnauthorized();
+    }
+
+    public function test_me_includes_tenant_name(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $this->getJson($this->baseUrl . '/api/auth/me')
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => ['tenant'],
+            ]);
     }
 }
