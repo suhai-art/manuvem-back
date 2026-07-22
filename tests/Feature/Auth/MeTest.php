@@ -42,4 +42,51 @@ class MeTest extends TestCase
                 'data' => ['tenant'],
             ]);
     }
+
+    public function test_me_includes_roles_and_permissions(): void
+    {
+        $admin = $this->createUserWithRole('admin');
+        Sanctum::actingAs($admin);
+
+        $this->getJson($this->baseUrl . '/api/auth/me')
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'email',
+                    'status',
+                    'roles',
+                    'permissions',
+                    'tenant',
+                ],
+            ])
+            ->assertJson([
+                'data' => [
+                    'roles' => ['admin'],
+                ],
+            ]);
+
+        // admin must carry every granular permission seeded by PermissionSeeder
+        $permissions = $this->getJson($this->baseUrl . '/api/auth/me')
+            ->json('data.permissions');
+
+        $this->assertNotEmpty($permissions);
+        $this->assertContains('client.view', $permissions);
+    }
+
+    public function test_me_permissions_are_empty_for_user_without_role(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $this->getJson($this->baseUrl . '/api/auth/me')
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    'roles' => [],
+                    'permissions' => [],
+                ],
+            ]);
+    }
 }

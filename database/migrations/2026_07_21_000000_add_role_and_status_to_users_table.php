@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->after('email');
-            $table->string('status')->default('active')->after('role');
+            $table->string('status')->default('active')->after('email');
             $table->softDeletes()->after('updated_at');
         });
     }

@@ -8,6 +8,8 @@ use App\Actions\User\FindUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Users\CreateUpdateUserRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class UsersController extends Controller
@@ -28,14 +30,20 @@ class UsersController extends Controller
             $data['per_page'] ?? 15
         );
 
-        return response()->json($items);
+        $payload = $items->toArray();
+        $payload['data'] = array_map(
+            fn (User $user) => (new UserResource($user))->resolve($request),
+            $items->getCollection()->all()
+        );
+
+        return response()->json($payload);
     }
 
     public function findOne(string $id): JsonResponse
     {
         $item = $this->findUserAction->findOne($id);
 
-        return response()->json($item);
+        return response()->json(new UserResource($item));
     }
 
     public function createUpdate(CreateUpdateUserRequest $request, ?string $id = null): JsonResponse
@@ -44,7 +52,7 @@ class UsersController extends Controller
 
         $item = $this->createUpdateUserAction->execute($data, $id);
 
-        return response()->json($item, $id === null ? 201 : 200);
+        return response()->json(new UserResource($item), $id === null ? 201 : 200);
     }
 
     public function toggleActive(string $id): JsonResponse
@@ -54,7 +62,7 @@ class UsersController extends Controller
             'status' => $user->status === 'active' ? 'inactive' : 'active',
         ]);
 
-        return response()->json($user);
+        return response()->json(new UserResource($user));
     }
 
     public function delete(string $id): JsonResponse

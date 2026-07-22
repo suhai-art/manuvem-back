@@ -39,7 +39,7 @@ class CreateUpdateUserRequest extends FormRequest
                 'min:8',
                 'confirmed',
             ],
-            'role' => ['sometimes', 'string', 'in:admin,user'],
+            'role' => ['sometimes', 'string', 'in:root,admin,user'],
             'status' => ['sometimes', 'string', 'in:active,inactive'],
         ];
     }

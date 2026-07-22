@@ -8,12 +8,17 @@ class CreateUpdateUserAction
 {
     public function execute(array $data, ?string $id = null): User
     {
+        $role = $data['role'] ?? 'user';
+        unset($data['role']);
+
         $user = $id !== null
             ? User::query()->findOrFail($id)
-            : new User();
+            : new User;
 
         $user->fill($data);
         $user->save();
+
+        $user->syncRoles([$role]);
 
         return $user;
     }

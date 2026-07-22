@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\LoginRequest;
-use App\Models\User;
+use App\Http\Resources\UserResource;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,15 +15,15 @@ class AuthController extends Controller
     {
         $credentials = $request->validated();
 
-        if (!Auth::attempt($credentials)) {
-            throw new AuthenticationException();
+        if (! Auth::attempt($credentials)) {
+            throw new AuthenticationException;
         }
 
         $user = Auth::user();
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => new UserResource($user),
             'token' => $token,
         ]);
     }
@@ -38,9 +38,10 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $tenant_name = tenant('name');
-        $response = $request->user();
-        $response['tenant'] = $tenant_name;
+        $user = $request->user();
 
-        return response()->json($response);
+        return response()->json(
+            (new UserResource($user))->toArray($request) + ['tenant' => $tenant_name]
+        );
     }
 }
