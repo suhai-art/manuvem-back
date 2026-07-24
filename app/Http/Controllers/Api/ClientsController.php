@@ -8,6 +8,8 @@ use App\Actions\Client\FindClientAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Clients\CreateUpdateClientRequest;
 use App\Http\Requests\Api\FindRequest;
+use App\Http\Resources\ClientResource;
+use App\Models\Client;
 use Illuminate\Http\JsonResponse;
 
 class ClientsController extends Controller
@@ -28,14 +30,20 @@ class ClientsController extends Controller
             $data['per_page'] ?? 15
         );
 
-        return response()->json($items);
+        $payload = $items->toArray();
+        $payload['data'] = array_map(
+            fn (Client $client) => (new ClientResource($client))->resolve($request),
+            $items->getCollection()->all()
+        );
+
+        return response()->json($payload);
     }
 
     public function findOne(string $id): JsonResponse
     {
         $item = $this->findClientAction->findOne($id);
 
-        return response()->json($item);
+        return response()->json(new ClientResource($item));
     }
 
     public function createUpdate(CreateUpdateClientRequest $request, ?string $id = null): JsonResponse
@@ -44,7 +52,7 @@ class ClientsController extends Controller
 
         $item = $this->createUpdateClientAction->execute($data, $id);
 
-        return response()->json($item, $id === null ? 201 : 200);
+        return response()->json(new ClientResource($item), $id === null ? 201 : 200);
     }
 
     public function toggleActive(string $id): JsonResponse

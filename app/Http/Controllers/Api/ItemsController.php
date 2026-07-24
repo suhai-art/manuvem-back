@@ -8,6 +8,8 @@ use App\Actions\Item\FindItemAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Items\CreateUpdateItemRequest;
+use App\Http\Resources\ItemResource;
+use App\Models\Item;
 use Illuminate\Http\JsonResponse;
 
 class ItemsController extends Controller
@@ -28,14 +30,20 @@ class ItemsController extends Controller
             $data['per_page'] ?? 15
         );
 
-        return response()->json($items);
+        $payload = $items->toArray();
+        $payload['data'] = array_map(
+            fn (Item $item) => (new ItemResource($item))->resolve($request),
+            $items->getCollection()->all()
+        );
+
+        return response()->json($payload);
     }
 
     public function findOne(string $id): JsonResponse
     {
         $item = $this->findItemAction->findOne($id);
 
-        return response()->json($item);
+        return response()->json(new ItemResource($item));
     }
 
     public function createUpdate(CreateUpdateItemRequest $request, ?string $id = null): JsonResponse
@@ -44,7 +52,7 @@ class ItemsController extends Controller
 
         $item = $this->createUpdateItemAction->execute($data, $id);
 
-        return response()->json($item, $id === null ? 201 : 200);
+        return response()->json(new ItemResource($item), $id === null ? 201 : 200);
     }
 
     public function toggleActive(string $id): JsonResponse
