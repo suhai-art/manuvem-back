@@ -32,7 +32,7 @@ class ClientsController extends Controller
 
         $payload = $items->toArray();
         $payload['data'] = array_map(
-            fn (Client $client) => (new ClientResource($client))->resolve($request),
+            fn(Client $client) => (new ClientResource($client))->resolve($request),
             $items->getCollection()->all()
         );
 

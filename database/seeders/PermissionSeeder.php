@@ -13,13 +13,14 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $guard = config('auth.defaults.guard', 'web');
+        $guard = 'sanctum';
 
         $modules = [
             'client' => ['view', 'create', 'update', 'delete'],
             'item'   => ['view', 'create', 'update', 'delete'],
             'user'   => ['view', 'create', 'update', 'delete'],
             'tenant' => ['view', 'create', 'update', 'delete'],
+            'role'   => ['view', 'create', 'update', 'delete'],
             'permissions' => ['view', 'manage'],
         ];
 
