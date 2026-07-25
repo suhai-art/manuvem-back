@@ -10,7 +10,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $guard = config('auth.defaults.guard', 'web');
+        $guard = config('auth.defaults.guard', 'sanctum');
 
         Role::firstOrCreate(['name' => 'root', 'guard_name' => $guard]);
         Role::firstOrCreate(['name' => 'admin', 'guard_name' => $guard]);

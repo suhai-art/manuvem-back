@@ -15,7 +15,7 @@ class AuthController extends Controller
     {
         $credentials = $request->validated();
 
-        if (! Auth::attempt($credentials)) {
+        if (! Auth::guard('web')->attempt($credentials)) {
             throw new AuthenticationException;
         }
 

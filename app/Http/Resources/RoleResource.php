@@ -26,13 +26,13 @@ class RoleResource extends JsonResource
             'name' => $this->name,
             'guard_name' => $this->guard_name,
             'permissions' => $this->permissions
-                ->map(fn ($permission) => [
+                ->map(fn($permission) => [
                     'id' => $permission->id,
                     'name' => $permission->name,
                 ])
                 ->all(),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->format('d/m/Y'),
+            'updated_at' => $this->updated_at->format('d/m/Y'),
         ];
     }
 }
