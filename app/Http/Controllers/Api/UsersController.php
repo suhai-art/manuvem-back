@@ -12,6 +12,7 @@ use App\Http\Requests\Api\Users\CreateUpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -52,7 +53,8 @@ class UsersController extends Controller
     {
         $data = $request->validated();
 
-        $item = $this->createUpdateUserAction->execute($data, $id);
+        $user_permissions = auth()->user()->getAllPermissions()->pluck('name');
+        $item = $this->createUpdateUserAction->execute($data, $user_permissions, $id);
 
         return response()->json(new UserResource($item), $id === null ? 201 : 200);
     }
@@ -76,8 +78,8 @@ class UsersController extends Controller
 
     public function formOptions(): JsonResponse
     {
-
-        $payload = $this->formOptionsAction->execute();
+        $user_permissions = auth()->user()->getAllPermissions()->pluck('name');
+        $payload = $this->formOptionsAction->execute($user_permissions->toArray());
 
         return response()->json($payload);
     }
