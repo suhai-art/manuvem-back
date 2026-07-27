@@ -39,7 +39,7 @@ class CreateUpdateUserRequest extends FormRequest
                 'min:8',
                 'confirmed',
             ],
-            'role' => ['sometimes', 'string', 'in:root,admin,user'],
+            'role' => ['required', 'integer', Rule::exists('roles', 'id')],
             'status' => ['sometimes', 'string', 'in:active,inactive'],
         ];
     }

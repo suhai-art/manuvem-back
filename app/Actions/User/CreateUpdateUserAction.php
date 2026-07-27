@@ -3,23 +3,39 @@
 namespace App\Actions\User;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class CreateUpdateUserAction
 {
     public function execute(array $data, ?string $id = null): User
     {
-        $role = $data['role'] ?? 'user';
-        unset($data['role']);
+        DB::beginTransaction();
 
-        $user = $id !== null
-            ? User::query()->findOrFail($id)
-            : new User;
+        try {
+            $roleId = $data['role'] ?? null;
+            unset($data['role']);
 
-        $user->fill($data);
-        $user->save();
+            $user = $id !== null
+                ? User::findOrFail($id)
+                : new User();
 
-        $user->syncRoles([$role]);
+            $user->fill($data);
+            $user->save();
 
-        return $user;
+            if ($roleId) {
+                $role = Role::findOrFail($roleId);
+
+                $user->syncRoles($role);
+            }
+
+            DB::commit();
+
+            return $user;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
     }
 }

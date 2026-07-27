@@ -3,19 +3,30 @@
 namespace App\Actions\Tenant;
 
 use App\Models\Tenant;
+use Illuminate\Support\Facades\DB;
 
 class CreateTenantAction
 {
     public function execute(string $id, string $domain): Tenant
     {
-        $tenant = Tenant::create([
-            'id' => $id,
-        ]);
+        DB::beginTransaction();
 
-        $tenant->domains()->create([
-            'domain' => $domain,
-        ]);
+        try {
+            $tenant = Tenant::create([
+                'id' => $id,
+            ]);
 
-        return $tenant;
+            $tenant->domains()->create([
+                'domain' => $domain,
+            ]);
+
+            DB::commit();
+
+            return $tenant;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
     }
 }

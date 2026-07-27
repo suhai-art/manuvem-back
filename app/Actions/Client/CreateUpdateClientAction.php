@@ -3,18 +3,29 @@
 namespace App\Actions\Client;
 
 use App\Models\Client;
+use Illuminate\Support\Facades\DB;
 
 class CreateUpdateClientAction
 {
     public function execute(array $data, ?string $id = null): Client
     {
-        $client = $id !== null
-            ? Client::query()->findOrFail($id)
-            : new Client();
+        DB::beginTransaction();
 
-        $client->fill($data);
-        $client->save();
+        try {
+            $client = $id !== null
+                ? Client::query()->findOrFail($id)
+                : new Client();
 
-        return $client;
+            $client->fill($data);
+            $client->save();
+
+            DB::commit();
+
+            return $client;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
     }
 }
