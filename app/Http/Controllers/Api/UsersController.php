@@ -77,8 +77,7 @@ class UsersController extends Controller
 
     public function formOptions(): JsonResponse
     {
-        $user_permissions = auth()->user()->getAllPermissions()->pluck('name');
-        $payload = $this->formOptionsAction->execute($user_permissions->toArray());
+        $payload = $this->formOptionsAction->execute();
 
         return response()->json($payload);
     }
