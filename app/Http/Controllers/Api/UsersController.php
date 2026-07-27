@@ -53,8 +53,7 @@ class UsersController extends Controller
     {
         $data = $request->validated();
 
-        $user_permissions = auth()->user()->getAllPermissions()->pluck('name');
-        $item = $this->createUpdateUserAction->execute($data, $user_permissions, $id);
+        $item = $this->createUpdateUserAction->execute($data, $id);
 
         return response()->json(new UserResource($item), $id === null ? 201 : 200);
     }
