@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Actions\Role\CreateUpdateRoleAction;
 use App\Actions\Role\DeleteRoleAction;
 use App\Actions\Role\FindRoleAction;
+use App\Actions\Role\FormOptionsRolesAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Roles\CreateUpdateRoleRequest;
@@ -19,6 +20,7 @@ class RolesController extends Controller
         private readonly FindRoleAction $findRoleAction,
         private readonly CreateUpdateRoleAction $createUpdateRoleAction,
         private readonly DeleteRoleAction $deleteRoleAction,
+        private readonly FormOptionsRolesAction $formOptionsActions,
     ) {}
 
     public function find(FindRequest $request): JsonResponse
@@ -33,7 +35,7 @@ class RolesController extends Controller
 
         $payload = $items->toArray();
         $payload['data'] = array_map(
-            fn (Role $role) => (new RoleResource($role))->resolve($request),
+            fn(Role $role) => (new RoleResource($role))->resolve($request),
             $items->getCollection()->all()
         );
 
@@ -58,11 +60,10 @@ class RolesController extends Controller
 
     public function delete(string $id): JsonResponse
     {
-        // Prevent deleting a role that is still assigned to users.
         $role = Role::query()->findOrFail($id);
 
         $assigned = User::query()
-            ->whereHas('roles', fn ($q) => $q->where('role_id', $role->id))
+            ->whereHas('roles', fn($q) => $q->where('role_id', $role->id))
             ->exists();
 
         if ($assigned) {
@@ -75,5 +76,13 @@ class RolesController extends Controller
         $this->deleteRoleAction->execute($id);
 
         return response()->json(['message' => 'Papel removido com sucesso.']);
+    }
+
+    public function formOptions(): JsonResponse
+    {
+        $payload = $this->formOptionsActions->execute();
+        return response()->json(
+            $payload
+        );
     }
 }
