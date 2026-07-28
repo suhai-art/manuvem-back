@@ -12,7 +12,6 @@ use App\Http\Requests\Api\Users\CreateUpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
