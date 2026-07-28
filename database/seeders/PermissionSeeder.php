@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Support\Permissions;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -15,22 +16,11 @@ class PermissionSeeder extends Seeder
     {
         $guard = config('auth.defaults.guard', 'sanctum');
 
-        $modules = [
-            'client' => ['view', 'create', 'update', 'delete'],
-            'item' => ['view', 'create', 'update', 'delete'],
-            'user' => ['view', 'create', 'update', 'delete'],
-            'tenant' => ['view', 'create', 'update', 'delete'],
-            'role' => ['view', 'create', 'update', 'delete'],
-            'permissions' => ['view', 'manage'],
-        ];
+        $modules = Permissions::MODULES;
 
-        $root_modules = [
-            'permissions',
-            'tenant'
-        ];
+        $root_modules = Permissions::ROOT_MODULES;
 
         $permissions = [];
-
         foreach ($modules as $module => $actions) {
             foreach ($actions as $action) {
                 $permission = Permission::firstOrCreate([
