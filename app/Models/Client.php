@@ -31,4 +31,9 @@ class Client extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
 }
