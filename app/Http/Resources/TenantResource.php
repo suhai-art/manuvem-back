@@ -16,9 +16,9 @@ class TenantResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'domains' => $this->domains,
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'domains'   => $this->domains,
         ];
     }
 }

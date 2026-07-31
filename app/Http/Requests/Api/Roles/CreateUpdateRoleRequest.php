@@ -24,7 +24,7 @@ class CreateUpdateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
+            'name'          => [
                 'required',
                 'string',
                 'max:255',
@@ -32,9 +32,9 @@ class CreateUpdateRoleRequest extends FormRequest
                     ->where('guard_name', $this->input('guard_name', config('auth.defaults.guard', 'web')))
                     ->ignore($this->route('id')),
             ],
-            'guard_name' => ['sometimes', 'string', 'max:255'],
-            'permission' => ['sometimes', 'array'],
-            'permission.*' => ['integer', 'exists:permissions,id'],
+            'guard_name'    => ['sometimes', 'string', 'max:255'],
+            'permission'    => ['sometimes', 'array'],
+            'permission.*'  => ['integer', 'exists:permissions,id'],
         ];
     }
 }

@@ -23,9 +23,9 @@ class CreateUpdateTenantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'string'],
-            'name' => ['required', 'string'],
-            'domains' => ['required', 'array'],
+            'id'        => ['required', 'string'],
+            'name'      => ['required', 'string'],
+            'domains'   => ['required', 'array'],
         ];
     }
 }

@@ -16,13 +16,13 @@ class ItemResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'internal_code' => $this->internal_code,
-            'name' => $this->name,
-            'description' => $this->description,
-            'default_unit_price' => $this->default_unit_price,
-            'created_at' => $this->created_at->format('d/m/Y'),
-            'updated_at' => $this->updated_at->format('d/m/Y'),
+            'id'                    => $this->id,
+            'internal_code'         => $this->internal_code,
+            'name'                  => $this->name,
+            'description'           => $this->description,
+            'default_unit_price'    => $this->default_unit_price,
+            'created_at'            => $this->created_at->format('d/m/Y'),
+            'updated_at'            => $this->updated_at->format('d/m/Y'),
         ];
     }
 }

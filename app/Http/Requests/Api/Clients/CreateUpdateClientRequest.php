@@ -23,8 +23,8 @@ class CreateUpdateClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
-            'document' => ['required', 'string'],
+            'name'      => ['required', 'string'],
+            'document'  => ['required', 'string'],
         ];
     }
 }

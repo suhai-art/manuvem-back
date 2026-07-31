@@ -23,10 +23,10 @@ class CreateUpdateItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'internal_code' => ['required', 'string'],
-            'name' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'default_unit_price' => ['required', 'numeric', 'min:0'],
+            'internal_code'         => ['required', 'string'],
+            'name'                  => ['required', 'string'],
+            'description'           => ['required', 'string'],
+            'default_unit_price'    => ['required', 'numeric', 'min:0'],
         ];
     }
 }

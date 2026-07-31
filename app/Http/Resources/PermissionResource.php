@@ -18,11 +18,11 @@ class PermissionResource extends JsonResource
     {
         /** @var Permission $this */
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'guard_name' => $this->guard_name,
-            'created_at' => $this->created_at->format('d/m/Y'),
-            'updated_at' => $this->updated_at->format('d/m/Y'),
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'guard_name'    => $this->guard_name,
+            'created_at'    => $this->created_at->format('d/m/Y'),
+            'updated_at'    => $this->updated_at->format('d/m/Y'),
         ];
     }
 }

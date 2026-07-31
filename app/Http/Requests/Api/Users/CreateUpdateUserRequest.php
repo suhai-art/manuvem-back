@@ -26,21 +26,21 @@ class CreateUpdateUserRequest extends FormRequest
         $userId = $this->route('id');
 
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
+            'name'      => ['required', 'string', 'max:255'],
+            'email'     => [
                 'required',
                 'email',
                 'max:255',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'password' => [
+            'password'  => [
                 $this->isMethod('post') ? 'required' : 'sometimes',
                 'string',
                 'min:8',
                 'confirmed',
             ],
-            'role' => ['required', 'integer', Rule::exists('roles', 'id')],
-            'status' => ['sometimes', 'string', 'in:active,inactive'],
+            'role'      => ['required', 'integer', Rule::exists('roles', 'id')],
+            'status'    => ['sometimes', 'string', 'in:active,inactive'],
         ];
     }
 }
