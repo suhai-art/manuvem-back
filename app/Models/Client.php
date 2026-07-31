@@ -22,9 +22,11 @@ class Client extends Model
     protected $fillable = [
         'name',
         'document',
+        'active',
     ];
 
     protected $casts = [
+        'active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

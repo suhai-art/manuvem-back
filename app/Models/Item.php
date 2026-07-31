@@ -24,10 +24,12 @@ class Item extends Model
         'name',
         'description',
         'default_unit_price',
+        'active',
     ];
 
     protected $casts = [
         'default_unit_price' => 'decimal:2',
+        'active' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',

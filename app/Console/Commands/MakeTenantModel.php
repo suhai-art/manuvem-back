@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class MakeTenantModel extends Command
 {
-    protected $signature = 'make:tenant-model {name} {--m}';
+    protected $signature = 'make:tenant-model {name} {--m} {--f}';
 
     protected $description = 'Cria um Model para tenant e sua migration';
 
