@@ -2,7 +2,7 @@
 
 namespace App\Actions\Role;
 
-use App\Http\Resources\PermissionResource;
+use App\Http\Resources\Permission\PermissionResource;
 use App\Support\Permissions;
 use Spatie\Permission\Models\Permission;
 

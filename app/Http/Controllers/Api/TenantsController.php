@@ -8,8 +8,8 @@ use App\Actions\Tenant\FindTenantAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Tenants\CreateUpdateTenantRequest;
-use App\Http\Resources\ItemResource;
-use App\Http\Resources\TenantResource;
+use App\Http\Resources\Item\ItemResource;
+use App\Http\Resources\Tenant\TenantResource;
 use App\Models\Tenant;
 use Illuminate\Http\JsonResponse;
 

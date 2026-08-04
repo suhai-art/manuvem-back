@@ -9,7 +9,7 @@ use App\Actions\Role\FormOptionsRolesAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Roles\CreateUpdateRoleRequest;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Role\RoleResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;

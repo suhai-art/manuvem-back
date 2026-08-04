@@ -9,7 +9,7 @@ use App\Actions\User\FormOptionsUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Users\CreateUpdateUserRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 

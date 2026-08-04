@@ -8,7 +8,7 @@ use App\Actions\Item\FindItemAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FindRequest;
 use App\Http\Requests\Api\Items\CreateUpdateItemRequest;
-use App\Http\Resources\ItemResource;
+use App\Http\Resources\Item\ItemResource;
 use App\Models\Item;
 use Illuminate\Http\JsonResponse;
 

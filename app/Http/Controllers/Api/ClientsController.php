@@ -8,7 +8,7 @@ use App\Actions\Client\FindClientAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Clients\CreateUpdateClientRequest;
 use App\Http\Requests\Api\FindRequest;
-use App\Http\Resources\ClientResource;
+use App\Http\Resources\Client\ClientResource;
 use App\Models\Client;
 use Illuminate\Http\JsonResponse;
 

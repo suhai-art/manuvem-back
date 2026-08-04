@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Role\CreateUpdateRoleAction;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PermissionResource;
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Permission\PermissionResource;
+use App\Http\Resources\Role\RoleResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Enums;
+namespace App\Http\Resources\Enum;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

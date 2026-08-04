@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-use App\Http\Resources\RoleResource;
+use App\Http\Resources\Role\RoleResource;
 use Spatie\Permission\Models\Role;
 
 class FormOptionsUserAction
