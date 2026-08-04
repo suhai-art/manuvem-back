@@ -34,4 +34,18 @@ class Item extends Model
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+
+    public function budgets()
+    {
+        return $this->belongsToMany(Budget::class, 'budget_item')
+            ->Using(BudgetItem::class)
+            ->withPivot([
+                'budget_id',
+                'item_id',
+                'name_snapshot',
+                'unit_price',
+                'quantity',
+            ])->withTimestamps();
+    }
 }

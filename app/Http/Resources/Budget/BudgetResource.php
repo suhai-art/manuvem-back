@@ -22,6 +22,7 @@ class BudgetResource extends JsonResource
                 'value'     => $this->total_amount,
                 'label'     => 'R$' . number_format($this->total_amount / 100, 2, ',', '.'),
             ],
+            'items'         => BudgetItemResource::make($this->whenLoaded('items')),
             'created_at'    => $this->created_at->format('d/m/Y'),
             'updated_at'    => $this->updated_at->format('d/m/Y'),
             'client'        => ClientResource::make($this->whenLoaded('client')),

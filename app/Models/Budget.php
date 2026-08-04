@@ -37,4 +37,17 @@ class Budget extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'budget_item')
+            ->Using(BudgetItem::class)
+            ->withPivot([
+                'budget_id',
+                'item_id',
+                'name_snapshot',
+                'unit_price',
+                'quantity',
+            ])->withTimestamps();
+    }
 }
